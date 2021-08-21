@@ -44,6 +44,24 @@ class _HomeState extends State<Home> {
   double dolar = 0;
   double euro = 0;
 
+  void _realChanged(String text){
+    double real = double.parse(text);
+    dolarController.text = (real/dolar).toStringAsFixed(2);
+    euroController.text = (real/euro).toStringAsFixed(2);
+  }
+
+  void _dolarChanged(String text){
+    double dolar = double.parse(text);
+    realController.text = (dolar * this.dolar).toStringAsFixed(2);
+    euroController.text = (dolar * this.dolar / euro).toStringAsFixed(2);
+  }
+
+  void _euroChanged(String text){
+    double euro = double.parse(text);
+    realController.text = (euro * this.euro).toStringAsFixed(2);
+    dolarController.text = (euro * this.euro / dolar).toStringAsFixed(2);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -89,11 +107,11 @@ class _HomeState extends State<Home> {
                         size: 150,
                         color: Colors.amber,
                       ),
-                      buildTextField("Reais", "R\$", realController),
+                      buildTextField("Reais", "R\$", realController, _realChanged),
                       Divider(),
-                      buildTextField("Dólares", "US\$", dolarController),
+                      buildTextField("Dólares", "US\$", dolarController, _dolarChanged),
                       Divider(),
-                      buildTextField("Euros", "€", euroController),
+                      buildTextField("Euros", "€", euroController, _euroChanged),
                     ],
                   ),
                 );
@@ -105,7 +123,9 @@ class _HomeState extends State<Home> {
   }
 }
 
-Widget buildTextField(String label, String prefix, TextEditingController c){
+void newElement(String f) => (f);
+
+Widget buildTextField(String label, String prefix, TextEditingController c, newElement){
   return TextField(
     controller: c,
     decoration: InputDecoration(
@@ -114,5 +134,6 @@ Widget buildTextField(String label, String prefix, TextEditingController c){
         border: OutlineInputBorder(),
         prefixText: prefix),
     style: TextStyle(color: Colors.amber, fontSize: 25),
+    onChanged: newElement,
   );
 }
